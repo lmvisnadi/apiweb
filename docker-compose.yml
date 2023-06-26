@@ -1,0 +1,45 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    hostname: postgres
+    ports:
+      - 5432:5432/tcp
+    networks:
+      - tst-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: tst2022
+      POSTGRES_DB: tst
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  apiweb:
+    image: apiweb:latest
+    build:
+      context: .
+      dockerfile: ./src/apiClienteEndereco/Dockerfile
+    ports:
+      - 7104:7104
+    restart: on-failure
+    networks:
+      - tst-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:7104
+    volumes:
+      - ./src/apiClienteEndereco/appsettings.Docker.json:/app/appsettings.json
+    depends_on:
+       postgres:
+        condition: service_healthy
+volumes:
+  postgres-data:
+networks: 
+    tst-network:
+        driver: bridge

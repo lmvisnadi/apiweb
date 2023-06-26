@@ -1,0 +1,4 @@
+﻿INSERT INTO public."Usuario"("Id", "Nome", "Email", "Senha", 
+                             "CreatedAt", "CreatedBy", "IsDeleted", "FlagAtivo")
+VALUES ('688991dc-2cf0-4acd-bbb2-ea4d71f77a13', 'Admin', 'teste@teste.com', '81dc9bdb52d04dc20036dbd8313ed055',
+        '2022-11-21', '00000000-0000-0000-0000-000000000000', false,  true);
